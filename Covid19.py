@@ -4,7 +4,14 @@ from mysql_connector import MYSQL_CONNECTOR
 import sys
 
 
-request = requests.get("https://www.worldometers.info/coronavirus/")
+URL = "https://www.worldometers.info/coronavirus/"
+
+
+def get_request(url):
+    request = requests.get(url)
+    return request
+
+request = get_request(URL)
 data = request.text
 soup = bs4.BeautifulSoup(data, 'html.parser')
 
@@ -16,9 +23,6 @@ location = location_div.text
 
 total_case_div= soup.find_all('tr')[9].find_all('td')[2].text
 
-"""
-
-
 connector = MYSQL_CONNECTOR()
 query = "INSERT INTO c_data (continent,location, date) VALUES ('{}','{}', now());".format(continent,location)
 print(query)
@@ -27,4 +31,4 @@ print("{} works successfully!".format(query))
 if (connector.CONNECTON.is_connected()):
     connector.CONNECTON.close()
     print("MySQL connection is closed")
-    sys.exit(1)"""
+    sys.exit(1)
